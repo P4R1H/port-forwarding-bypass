@@ -1,5 +1,13 @@
 {
+  "Ids" : {
   "Authorized_Users" : ,
   "Terminal" : ,
   "Authorized_Servers" : 
+  },
+
+  "Commands" : {
+    "Banned" : [],
+    "Aliases" : {}
+  }
+
 }
