@@ -76,8 +76,13 @@ async def ssh(ctx):
     if(ctx.author.id!=617021192011776000): 
         await ctx.respond("No", ephemeral = True)
         return
-    client.terminal = 1
-    await ctx.respond("Terminal activated.")
+    if(client.terminal == 1):
+        client.terminal = 0
+        await ctx.respond("Terminal deactivated.")
+    else:
+        client.terminal = 1
+        await ctx.respond("Terminal activated.")
+
 
 @client.slash_command(guild_ids=[877275069309657089], description = "Upload file to send to remote server.")
 async def upload_file(ctx, file: discord.Option(discord.Attachment, description="File"), relative_path=None):
@@ -88,6 +93,20 @@ async def upload_file(ctx, file: discord.Option(discord.Attachment, description=
         relative_path = file.filename
     saved_file = await file.save(relative_path)
     await ctx.respond(f"File saved to `{os.getcwd()}/{relative_path}`", ephemeral = True)
+
+
+@client.slash_command(guild_ids=[877275069309657089], description = "Retrieve file from remote server.")
+async def get_file(ctx, relative_path):
+    if(ctx.author.id!=617021192011776000): 
+        await ctx.respond("No", ephemeral = True)
+        return
+    try:
+        with open(relative_path, 'rb') as file:
+            discord_file = discord.File(file, filename=relative_path)
+            await ctx.respond(file=discord_file)
+    except Exception as a:
+        await ctx.respond(f"Couldn't upload file\nError: `{a}`")
+    
 
 
 client.run(os.getenv("TOKEN"))
